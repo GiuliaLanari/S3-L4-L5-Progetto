@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,7 +12,8 @@ import { Link } from "react-router-dom";
 
 const ArticleDetails = () => {
   const params = useParams();
-  const [articles, setArticles] = useState([]);
+  const [article, setArticle] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch(baseApiUrl + "/posts/" + params.id + "?_embed=1")
@@ -22,12 +24,14 @@ const ArticleDetails = () => {
           throw new Error("Ci sono problemi nel caricamento!");
         }
       })
-      .then((objArticles) => {
-        console.log(objArticles);
-        setArticles(objArticles);
+      .then((objArticle) => {
+        console.log(objArticle);
+        setArticle(objArticle);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("error", error);
+        setIsLoading(false);
       });
   }, [params.id]);
 
@@ -35,26 +39,31 @@ const ArticleDetails = () => {
     <>
       <Container>
         <Row>
-          <Col>
-            <Card>
-              {/* <Card.Img
-                variant="top"
-                src={
-                  articles._embedded["wp:featuredmedia"]
-                    ? articles._embedded["wp:featuredmedia"][0].source_url
-                    : "https://images.pexels.com/photos/169647/pexels-photo-169647.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                }
-              /> */}
-              <Card.Body>
-                {/* <Card.Title>{articles.title.rendered}</Card.Title> */}
-                {/* <Card.Text>{articles.content}</Card.Text> */}
-
-                <Link to={"/"} className="mt-auto">
-                  <Button variant="info">Go back</Button>
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
+          {isLoading ? (
+            <div className="d-flex justify-content-cente">
+              <Spinner animation="border" variant="info" />
+            </div>
+          ) : (
+            <Col className="mt-5">
+              <Card>
+                <Card.Img
+                  variant="top"
+                  src={
+                    article._embedded["wp:featuredmedia"]
+                      ? article._embedded["wp:featuredmedia"][0].source_url
+                      : "https://images.pexels.com/photos/169647/pexels-photo-169647.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  }
+                />
+                <Card.Body>
+                  <Card.Title>{article.title.rendered}</Card.Title>
+                  <Card.Text dangerouslySetInnerHTML={{ __html: article.content.rendered }}></Card.Text>
+                  <Link to={"/"} className="mt-auto">
+                    <Button variant="info">Go back</Button>
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          )}
         </Row>
       </Container>
     </>
