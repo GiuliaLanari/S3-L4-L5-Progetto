@@ -1,0 +1,13 @@
+.text {
+  background-image: url(https://images.pexels.com/photos/1279813/pexels-photo-1279813.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+  background-size: cover;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+.logo {
+  width: 20%;
+  border-radius: 100%;
+}
