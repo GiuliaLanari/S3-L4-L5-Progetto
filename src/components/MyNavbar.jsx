@@ -19,6 +19,9 @@ const MyNavbar = () => {
             <Link to={"/"} className="mt-auto text">
               Home
             </Link>
+            <Link to={"/add"} className="mt-auto ms-2 text">
+              CreateNewPost
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

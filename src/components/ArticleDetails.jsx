@@ -54,8 +54,19 @@ const ArticleDetails = () => {
                       : "https://images.pexels.com/photos/169647/pexels-photo-169647.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                   }
                 />
+
                 <Card.Body>
-                  <Card.Title>{article.title.rendered}</Card.Title>
+                  {article._embedded["wp:term"] && (
+                    <div>
+                      {article._embedded["wp:term"][0].map((category) => (
+                        <span key={category.id} className="badge rounded-pill text-bg-primary">
+                          {category.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <Card.Title className="display-4">{article.title.rendered}</Card.Title>
+                  <h4>Author: {article._embedded["author"][0].name}</h4>
                   <Card.Text dangerouslySetInnerHTML={{ __html: article.content.rendered }}></Card.Text>
                   <Link to={"/"} className="mt-auto">
                     <Button variant="info">Go back</Button>

@@ -11,11 +11,14 @@ import Button from "react-bootstrap/Button";
 const Home = () => {
   const [articles, setArticles] = useState([]);
   const [deletes, setDeletes] = useState(0);
+  const [lastPage, setLastPage] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetch(baseApiUrl + "/posts?_embed=1")
+    fetch(baseApiUrl + "/posts?page=" + currentPage + "&_embed=1")
       .then((response) => {
         if (response.ok) {
+          setLastPage(parseInt(response.headers.get("X-WP-TotalPages")));
           return response.json();
         } else {
           throw new Error("Ci sono problemi nel caricamento!");
@@ -27,7 +30,22 @@ const Home = () => {
       .catch((error) => {
         console.log("error", error);
       });
-  }, [deletes]);
+  }, [currentPage, deletes]);
+
+  const changePage = (paga) => {
+    setCurrentPage(paga);
+  };
+
+  function generatePaginationArray() {
+    let paginationArr = [];
+    for (let i = 1; i <= lastPage; i++) {
+      paginationArr.push({
+        n: i,
+        active: currentPage === i,
+      });
+    }
+    return paginationArr;
+  }
 
   const deleteArticle = (articleId) => {
     const authoString = btoa("Api-Rest:sPe4 5BTs d63O kAMe vTFG DD3r");
@@ -42,29 +60,6 @@ const Home = () => {
       }
     });
   };
-
-  //   const putArticle = (articleId) => {
-  //     const authoString = btoa("Api-Rest:sPe4 5BTs d63O kAMe vTFG DD3r");
-  //     fetch(baseApiUrl + "/posts/" + articleId, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: "Basic " + authoString,
-  //       },
-  //     }).then((response) => {
-  //         if (response.ok) {
-  //           return response.json();
-  //         } else {
-  //           throw new Error("Ci sono problemi nel caricamento!");
-  //         }
-  //       })
-  //       .then((objArticles) => {
-  //         setArticles(objArticles);
-  //       })
-  //       .catch((error) => {
-  //         console.log("error", error);
-  //       });
-  //   };
 
   return (
     <>
@@ -83,19 +78,47 @@ const Home = () => {
                 />
                 <Card.Body className="d-flex flex-column">
                   <Card.Title>{article.title.rendered}</Card.Title>
-                  <Link to={"/details/" + article.id} className="mt-auto">
-                    <Button variant="info">Show Details</Button>
-                  </Link>
-                  {/* <Button variant="success" className="my-2" onClick={() => putArticle(article.id)}>
-                    Edit
-                  </Button> */}
-                  <Button variant="danger" className="my-2" onClick={() => deleteArticle(article.id)}>
+                  <div className="d-flex justify-content-between">
+                    <Link to={"/details/" + article.id} className="my-2">
+                      <Button className="btn btn-outline-info text-white">Show Details</Button>
+                    </Link>
+                    <Link to={"/edit/" + article.id} className="my-2">
+                      <Button variant="success">Edit</Button>
+                    </Link>
+                  </div>
+                  <Button variant="danger" className="mt-auto" onClick={() => deleteArticle(article.id)}>
                     Delete
                   </Button>
                 </Card.Body>
               </Card>
             </Col>
           ))}
+
+          <Col className="col-12  mx-auto my-2">
+            <nav>
+              <ul className="pagination  justify-content-center">
+                <li className={`page-item ${currentPage === 1 && "disabled"}`}>
+                  <span className="page-link" onClick={() => currentPage !== 1 && changePage(currentPage - 1)}>
+                    Previous
+                  </span>
+                </li>
+
+                {generatePaginationArray().map((page) => (
+                  <li key={page.n} className={`page-item ${page.active && "active"}`}>
+                    <span className="page-link" onClick={() => changePage(page.n)}>
+                      {page.n}
+                    </span>
+                  </li>
+                ))}
+
+                <li className={`page-item ${currentPage === "lastPage" && "disabled"}`}>
+                  <span className="page-link" onClick={() => currentPage !== lastPage && changePage(currentPage + 1)}>
+                    Next
+                  </span>
+                </li>
+              </ul>
+            </nav>
+          </Col>
         </Row>
       </Container>
     </>
