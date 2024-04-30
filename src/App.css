@@ -1,3 +1,16 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#root {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
 .text {
   background-image: url(https://images.pexels.com/photos/6984996/pexels-photo-6984996.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
   background-size: cover;

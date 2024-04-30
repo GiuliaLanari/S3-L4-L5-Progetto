@@ -37,7 +37,7 @@ const ArticleDetails = () => {
 
   return (
     <>
-      <Container>
+      <Container className="mb-5">
         <Row>
           {isLoading ? (
             <div className="d-flex justify-content-center mt-5">

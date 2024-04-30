@@ -39,45 +39,47 @@ const AddPost = () => {
   };
 
   return (
-    <Col className="col-12 col-md-5 mx-auto my-4">
-      <Form onSubmit={postArticle}>
-        <Row className="mb-12">
-          <Form.Group as={Col} md="12" controlId="validationCustom01">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              placeholder="Title article"
-              onChange={(e) => {
-                setPost((state) => ({
-                  ...state,
-                  title: e.target.value,
-                }));
-              }}
-            />
-          </Form.Group>
-          <Form.Group as={Col} md="12" controlId="validationCustom01">
-            <Form.Label>Content</Form.Label>
-            <FloatingLabel controlId="floatingTextarea" label="Comments" className="mb-3">
+    <>
+      <Col className="col-12 col-md-5 mx-auto my-5">
+        <Form onSubmit={postArticle}>
+          <Row className="mb-12">
+            <Form.Group as={Col} md="12" controlId="validationCustom01">
+              <Form.Label>Title</Form.Label>
               <Form.Control
-                as="textarea"
-                placeholder="Leave a comment here"
+                required
+                type="text"
+                placeholder="Title article"
                 onChange={(e) => {
                   setPost((state) => ({
                     ...state,
-                    content: e.target.value,
+                    title: e.target.value,
                   }));
                 }}
               />
-            </FloatingLabel>
-          </Form.Group>
-        </Row>
+            </Form.Group>
+            <Form.Group as={Col} md="12" controlId="validationCustom01">
+              <Form.Label>Content</Form.Label>
+              <FloatingLabel controlId="floatingTextarea" label="Comments" className="mb-3">
+                <Form.Control
+                  as="textarea"
+                  placeholder="Leave a comment here"
+                  onChange={(e) => {
+                    setPost((state) => ({
+                      ...state,
+                      content: e.target.value,
+                    }));
+                  }}
+                />
+              </FloatingLabel>
+            </Form.Group>
+          </Row>
 
-        <Button type="submit" className="mt-2">
-          Edit
-        </Button>
-      </Form>
-    </Col>
+          <Button type="submit" className="mt-2">
+            Edit
+          </Button>
+        </Form>
+      </Col>
+    </>
   );
 };
 

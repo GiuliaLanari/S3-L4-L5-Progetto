@@ -19,7 +19,7 @@ const MyNavbar = () => {
             <Link to={"/"} className="mt-auto text">
               Home
             </Link>
-            <Link to={"/add"} className="mt-auto ms-2 text">
+            <Link to={"/add"} className="mt-auto ms-5 text">
               CreateNewPost
             </Link>
           </Nav>

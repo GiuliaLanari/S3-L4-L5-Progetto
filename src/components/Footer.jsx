@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <Container fluid className="mt-5 mb-0 py-2 text-center bg-black text-white">
+    // <div style={{ position: "fixed", bottom: 0, width: "100%" }}>
+    <Container fluid className=" mb-0 py-2 text-center bg-black text-white">
       <Row className="d-flex">
         <Col className="col-12 col-md-2 mt-4">
           <Link to={"/"} className="text-decoration-none text-white ">
@@ -44,6 +45,7 @@ const Footer = () => {
         </Col>
       </Row>
     </Container>
+    // </div>
   );
 };
 

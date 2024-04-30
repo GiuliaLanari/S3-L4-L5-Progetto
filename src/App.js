@@ -19,6 +19,7 @@ function App() {
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/add" element={<AddPost />} />
       </Routes>
+
       <Footer />
     </BrowserRouter>
   );
