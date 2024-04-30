@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import ArticleDetails from "./components/ArticleDetails";
 import Edit from "./components/Edit";
 import AddPost from "./components/AddPost";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/add" element={<AddPost />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

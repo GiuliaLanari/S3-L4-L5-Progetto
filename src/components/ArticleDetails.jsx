@@ -40,7 +40,7 @@ const ArticleDetails = () => {
       <Container>
         <Row>
           {isLoading ? (
-            <div className="d-flex justify-content-cente">
+            <div className="d-flex justify-content-center mt-5">
               <Spinner animation="border" variant="info" />
             </div>
           ) : (
@@ -59,7 +59,7 @@ const ArticleDetails = () => {
                   {article._embedded["wp:term"] && (
                     <div>
                       {article._embedded["wp:term"][0].map((category) => (
-                        <span key={category.id} className="badge rounded-pill text-bg-primary">
+                        <span key={category.id} className="badge rounded-pill text-bg-danger p-2 me-2">
                           {category.name}
                         </span>
                       ))}

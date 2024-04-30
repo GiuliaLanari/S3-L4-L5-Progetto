@@ -7,12 +7,14 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
   const [deletes, setDeletes] = useState(0);
   const [lastPage, setLastPage] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch(baseApiUrl + "/posts?page=" + currentPage + "&_embed=1")
@@ -26,9 +28,11 @@ const Home = () => {
       })
       .then((objArticles) => {
         setArticles(objArticles);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("error", error);
+        setIsLoading(false);
       });
   }, [currentPage, deletes]);
 
@@ -63,64 +67,70 @@ const Home = () => {
 
   return (
     <>
-      <Container>
-        <Row>
-          {articles.map((article) => (
-            <Col className="col-xs-12 col-md-4 col-lg-3 my-3 " key={article.id}>
-              <Card className="h-100 d-flex flex-column">
-                <Card.Img
-                  variant="top"
-                  src={
-                    article._embedded["wp:featuredmedia"]
-                      ? article._embedded["wp:featuredmedia"][0].source_url
-                      : "https://images.pexels.com/photos/169647/pexels-photo-169647.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  }
-                />
-                <Card.Body className="d-flex flex-column">
-                  <Card.Title>{article.title.rendered}</Card.Title>
-                  <div className="d-flex justify-content-between">
-                    <Link to={"/details/" + article.id} className="my-2">
-                      <Button className="btn btn-outline-info text-white">Show Details</Button>
-                    </Link>
-                    <Link to={"/edit/" + article.id} className="my-2">
-                      <Button variant="success">Edit</Button>
-                    </Link>
-                  </div>
-                  <Button variant="danger" className="mt-auto" onClick={() => deleteArticle(article.id)}>
-                    Delete
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+      {isLoading ? (
+        <div className="d-flex justify-content-center mt-5">
+          <Spinner animation="border" variant="info" />
+        </div>
+      ) : (
+        <Container>
+          <Row>
+            {articles.map((article) => (
+              <Col className="col-xs-12 col-md-4 col-lg-3 my-3 " key={article.id}>
+                <Card className="h-100 d-flex flex-column card-style">
+                  <Card.Img
+                    variant="top"
+                    src={
+                      article._embedded["wp:featuredmedia"]
+                        ? article._embedded["wp:featuredmedia"][0].source_url
+                        : "https://images.pexels.com/photos/169647/pexels-photo-169647.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    }
+                  />
+                  <Card.Body className="d-flex flex-column">
+                    <Card.Title>{article.title.rendered}</Card.Title>
+                    <div className="d-flex justify-content-between">
+                      <Link to={"/details/" + article.id} className="my-2">
+                        <Button className="btn btn-outline-info text-white">Show Details</Button>
+                      </Link>
+                      <Link to={"/edit/" + article.id} className="my-2">
+                        <Button variant="success">Edit</Button>
+                      </Link>
+                    </div>
+                    <Button variant="danger" className="mt-auto" onClick={() => deleteArticle(article.id)}>
+                      Delete
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
 
-          <Col className="col-12  mx-auto my-2">
-            <nav>
-              <ul className="pagination  justify-content-center">
-                <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-                  <span className="page-link" onClick={() => currentPage !== 1 && changePage(currentPage - 1)}>
-                    Previous
-                  </span>
-                </li>
-
-                {generatePaginationArray().map((page) => (
-                  <li key={page.n} className={`page-item ${page.active && "active"}`}>
-                    <span className="page-link" onClick={() => changePage(page.n)}>
-                      {page.n}
+            <Col className="col-12  mx-auto my-2">
+              <nav>
+                <ul className="pagination  justify-content-center page-navigate">
+                  <li className={`page-item ${currentPage === 1 && "disabled"}`}>
+                    <span className="page-link" onClick={() => currentPage !== 1 && changePage(currentPage - 1)}>
+                      Previous
                     </span>
                   </li>
-                ))}
 
-                <li className={`page-item ${currentPage === "lastPage" && "disabled"}`}>
-                  <span className="page-link" onClick={() => currentPage !== lastPage && changePage(currentPage + 1)}>
-                    Next
-                  </span>
-                </li>
-              </ul>
-            </nav>
-          </Col>
-        </Row>
-      </Container>
+                  {generatePaginationArray().map((page) => (
+                    <li key={page.n} className={`page-item ${page.active && "active"}`}>
+                      <span className="page-link" onClick={() => changePage(page.n)}>
+                        {page.n}
+                      </span>
+                    </li>
+                  ))}
+
+                  <li className={`page-item ${currentPage === "lastPage" && "disabled"}`}>
+                    <span className="page-link" onClick={() => currentPage !== lastPage && changePage(currentPage + 1)}>
+                      Next
+                    </span>
+                  </li>
+                </ul>
+              </nav>
+            </Col>
+          </Row>
+        </Container>
+      )}
     </>
   );
 };

@@ -6,10 +6,12 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import { useNavigate } from "react-router-dom";
 
 const Edit = () => {
   const params = useParams();
   const [post, setPost] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(baseApiUrl + "/posts/" + params.id)
@@ -55,6 +57,7 @@ const Edit = () => {
           title: objPost.title.rendered,
           content: objPost.content.rendered,
         });
+        navigate("/");
       })
       .catch((error) => {
         console.log("error", error);
